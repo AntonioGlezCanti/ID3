@@ -47,6 +47,3 @@ f,c,t,e = main._getAtributos()
 id3 = ID3.ID3(f,c,t,e)
 print(id3._calcularEntropia())
 
-
-
-
