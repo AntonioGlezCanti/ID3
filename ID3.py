@@ -30,5 +30,5 @@ class ID3 :
 
     def _calcularGanancia(self, atributo):
         cont = self._obtenerRepeticiones(atributo)
-        
-        
+    
+    
