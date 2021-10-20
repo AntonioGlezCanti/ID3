@@ -38,7 +38,4 @@ main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo.csv
 f,c,t,e = main._getAtributos()
 id3 = ID3.ID3(f,c,t,e)
 print(id3._calcularEntropia())
-
-
-
-
+print(id3._calcularGanancia(0))
