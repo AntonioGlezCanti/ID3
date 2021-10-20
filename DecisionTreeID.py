@@ -1,4 +1,3 @@
-import csv
 import ID3
 import numpy as np
 import pandas as pd
@@ -6,13 +5,13 @@ import pandas as pd
 class DecisionTreeID :
     
     def __init__(self):
-        self.tabla = []
-        self.filas = []
-        self.columnas = []
-        self.etiquetas = []
+        self.tabla = [] #tabla con los datos (tipo dataFrame)
+        self.filas = [] #array con las filas permitidas (tipo np.array)
+        self.columnas = [] #array con las columnas permitidas (tipo np.array)
+        self.etiquetas = {} #diccionario con los posibles valores/etiquetas de cada columna
 
     def learnDT(self,ficheroCVS):
-        self._readCSV(ficheroCVS)
+        self._readCSV(ficheroCVS) 
         self._obtenerEtiquetas()
         self.filas = np.ones(len(self.tabla))
         self.columnas = np.ones(len(self.tabla.columns))
@@ -28,7 +27,7 @@ class DecisionTreeID :
 
     def _obtenerEtiquetas (self):
         for c in self.tabla.columns:
-            self.etiquetas.append(pd.unique(self.tabla[c]).tolist())
+            self.etiquetas.update({c:pd.unique(self.tabla[c]).tolist()})
             
     def _getAtributos(self):
         return self.filas,self.columnas,self.tabla,self.etiquetas
@@ -38,4 +37,6 @@ main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo.csv
 f,c,t,e = main._getAtributos()
 id3 = ID3.ID3(f,c,t,e)
 print(id3._calcularEntropia())
-print(id3._calcularGanancia(0))
+print(id3._calcularGanancia('presion art'))
+
+
