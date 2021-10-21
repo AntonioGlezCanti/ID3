@@ -15,7 +15,7 @@ class DecisionTreeID :
         self._readCSV(ficheroCVS) 
         self._obtenerEtiquetas()
         self.filas = list(range(len(self.tabla)))
-        self.columnas = self.tabla.columns
+        self.columnas = self.tabla.columns.to_list()
 
     def drawDecisionTree(self):
         None
@@ -37,14 +37,10 @@ main = DecisionTreeID()
 main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo.csv")
 f,c,t,e = main._getAtributos()
 
-#print(t)
 col = ['azucar sangre','indice col','alergia ant', 'otras alergias', 'administrar farmaco']
-fil = [0,1,6,7,8,11]
-#print(t.loc()[fil,col])
+fil = t[t['presion art'] == 'Baja'].index.to_list()
 
-#print(-1*(4/6*math.log2(4/6) + 2/6*math.log2(2/6)))
-
-id3 = ID3.ID3(fil,col,t,e)
-id3.calcularNodo()
+id3 = ID3.ID3(f,c,t,e)
+id3._crearHijos()
 
 
