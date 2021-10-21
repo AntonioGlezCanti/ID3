@@ -27,19 +27,18 @@ class ID3 :
 
     """Calculamos la ganancia dado un atributo, que será de tipo String"""
     def _calcularGanancia(self,atributo):
-        entropias = {} #diccionario auxiliar para guardar la entropias de cada etiqueta
         etAtr = self.etiquetas[atributo] #etiquetas del atributo para el que se desea calcular la ganancia
         cont = self.tabla.groupby([self.atrDec,atributo])[atributo].count() #agrupamos por atrDec y atributo, y contamos
+        cont2 = self.tabla.groupby(atributo)[self.atrDec].count()
+        ganancia = self.entropia #inicializamos la ganancia
+        nrow = len(self.tabla)
+        
         for et in etAtr:
             val = []
             for ed in self.etDec:
                 val.append(cont.get(ed,0).get(et,0)) #obtenemos la cantidad de la etiqueta correspondiente para cada etiqueta de atrDec                
             e = self._entropia(val) #calculamos la entropia
-            entropias.update({et:e}) #la almacenamos
-        ganancia = self.entropia #inicializamos la ganancia
-        cont = self.tabla.groupby(atributo)[self.atrDec].count() #agrupamos por atributo de modo que obtenemos la cantidad que hay de cada etiqueta
-        for et in etAtr:
-            ganancia -= cont[et]/len(self.tabla)*entropias[et] #aplicamos la formula de la ganancia
+            ganancia -= cont2[et]/nrow*e 
         self.ganancias.update({atributo:ganancia}) #almacenamos la ganancia
 
     """Calculamos la entropia dado una lista de conteos"""
