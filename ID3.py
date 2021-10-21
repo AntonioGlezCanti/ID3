@@ -6,7 +6,7 @@ class ID3 :
     def __init__(self,filas,columnas,tabla,etiquetas):
         self.filas = filas
         self.columnas = columnas
-        self.tabla = tabla
+        self.tabla = tabla.loc()[filas,columnas]
         self.etiquetas = etiquetas
         self.atrDec = self.tabla.columns[len(self.tabla.columns)-1] #atributo de decision
         self.etDec = self.etiquetas[self.atrDec] #etiquetas del atributo de decision
@@ -14,16 +14,18 @@ class ID3 :
         self.ganancia = -1
         self.nodo = None #Nodo seleccionado
 
+    """Calcula el nodo con mayor ganancia y lo guarda en la variable nodo"""
     def calcularNodo(self):
         self._calcularEntropia()
-        for i in range(len(self.tabla.columns)-1):
-            self._calcularGanancia(self.tabla.columns[i])
+        for i in range(len(self.columnas)-1):
+            self._calcularGanancia(self.columnas[i])
         print(self.nodo)
 
     """Calculamos la entropia del nodo, es decir la general"""
     def _calcularEntropia(self):
         cont = self.tabla[self.atrDec].value_counts().tolist() #obtenemos la frecuencia de cada etiqueta
         self.entropia = self._entropia(cont) 
+        print(self.entropia)
 
     """Calculamos la ganancia dado un atributo, que será de tipo String"""
     def _calcularGanancia(self,atributo):
@@ -39,6 +41,8 @@ class ID3 :
                 val.append(cont.get(ed,0).get(et,0)) #obtenemos la cantidad de la etiqueta correspondiente para cada etiqueta de atrDec                
             e = self._entropia(val) #calculamos la entropia
             g -= cont2[et]/nrow*e 
+        print(atributo)
+        print(g)
         if g > self.ganancia: #si la ganancia es mayor que la calculada anteriormente nos quedamos con ella
             self.ganancia = g
             self.nodo = atributo
