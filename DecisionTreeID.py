@@ -1,6 +1,7 @@
 import ID3
 import numpy as np
 import pandas as pd
+import math
 
 class DecisionTreeID :
     
@@ -37,4 +38,5 @@ main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo.csv
 f,c,t,e = main._getAtributos()
 id3 = ID3.ID3(f,c,t,e)
 id3.calcularNodo()
+
 
