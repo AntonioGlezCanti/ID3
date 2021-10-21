@@ -8,27 +8,46 @@ class ID3 :
         self.columnas = columnas
         self.tabla = tabla
         self.etiquetas = etiquetas
+        self.atrDec = self.tabla.columns[len(self.tabla.columns)-1] #atributo de decision
+        self.etDec = self.etiquetas[self.atrDec] #etiquetas del atributo de decision
         self.entropia = 0
+        self.ganancias = {}
 
+    def calcularNodo(self):
+        self._calcularEntropia()
+        for i in range(len(self.tabla.columns)-1):
+            self._calcularGanancia(self.tabla.columns[i])
+        print(self.ganancias)
+
+
+    """Calculamos la entropia del nodo, es decir la general"""
     def _calcularEntropia(self):
-        atrDec = len(self.tabla[0])-1 #index del atributo de decision (el último atributo)
-        cont = self._obtenerRepeticiones(atrDec)
+        cont = self.tabla[self.atrDec].value_counts().tolist() #obtenemos la frecuencia de cada etiqueta
+        self.entropia = self._entropia(cont) 
+
+    """Calculamos la ganancia dado un atributo, que será de tipo String"""
+    def _calcularGanancia(self,atributo):
+        etAtr = self.etiquetas[atributo] #etiquetas del atributo para el que se desea calcular la ganancia
+        cont = self.tabla.groupby([self.atrDec,atributo])[atributo].count() #agrupamos por atrDec y atributo, y contamos
+        cont2 = self.tabla.groupby(atributo)[self.atrDec].count()
+        ganancia = self.entropia #inicializamos la ganancia
+        nrow = len(self.tabla)
+        
+        for et in etAtr:
+            val = []
+            for ed in self.etDec:
+                val.append(cont.get(ed,0).get(et,0)) #obtenemos la cantidad de la etiqueta correspondiente para cada etiqueta de atrDec                
+            e = self._entropia(val) #calculamos la entropia
+            ganancia -= cont2[et]/nrow*e 
+        self.ganancias.update({atributo:ganancia}) #almacenamos la ganancia
+
+    """Calculamos la entropia dado una lista de conteos"""
+    def _entropia(self, cont):
+        entropia = 0
         total = sum(cont)
-        for i in range(0,len(cont)):
-            self.entropia -= cont[i]/total*math.log2(cont[i]/total)  #aplicamos la formula de la entropia           
-        return self.entropia
-
-    def _obtenerRepeticiones(self,atributo):
-        et = self.etiquetas[atributo] #etiquetas del atributo de decision
-        cont = np.zeros(len(et)) #array que cuenta la cantidad de cada etiqueta
-
-        for i in range(1, len(self.tabla)): #recorremos la ultima columna
-            if self.filas[i] == 1 : #Si la fila no esta tachada
-                index = et.index(self.tabla[i][atributo]) 
-                cont[index]+=1#incrementamos el numero de la etiqueta
-        return(cont)
-
-    def _calcularGanancia(self, atributo):
-        cont = self._obtenerRepeticiones(atributo)
-    
-    
+        for c in cont:
+            if c != 0:
+                entropia -= c/total*math.log2(c/total)  #aplicamos la formula de la entropia           
+        return entropia
+        
+        
