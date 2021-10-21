@@ -34,11 +34,13 @@ class DecisionTreeID :
         return self.filas,self.columnas,self.tabla,self.etiquetas
 
 main = DecisionTreeID()
-main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo.csv")
+main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo2.csv")
 f,c,t,e = main._getAtributos()
 
-col = ['azucar sangre','indice col','alergia ant', 'otras alergias', 'administrar farmaco']
-fil = t[t['presion art'] == 'Baja'].index.to_list()
+#col = ['azucar sangre','indice col','alergia ant', 'otras alergias', 'administrar farmaco']
+#fil = t[t['presion art'] == 'Baja'].index.to_list()
+
+#print(t.iloc[0]['Atributo de salida'])
 
 id3 = ID3.ID3(f,c,t,e)
 id3._crearHijos()

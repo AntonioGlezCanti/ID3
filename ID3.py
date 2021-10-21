@@ -9,7 +9,7 @@ class ID3 :
         self.tablaOriginal = tabla
         self.filas = filas
         self.columnas = columnas
-        self.tabla = tabla.loc()[filas,columnas]
+        self.tabla = tabla.loc[filas,columnas]
         self.etiquetas = etiquetas
         self.atrDec = self.tabla.columns[len(self.tabla.columns)-1] #atributo de decision
         self.etDec = self.etiquetas[self.atrDec] #etiquetas del atributo de decision
@@ -36,7 +36,7 @@ class ID3 :
         for i in range(len(self.columnas)-1):
             self._calcularGanancia(self.columnas[i])
         if(self.entropia == 0):
-            self.nodo = 'Si'
+            self.nodo = self.tabla.iloc[0][self.atrDec]
 
     """Calculamos la entropia del nodo, es decir la general"""
     def _calcularEntropia(self):
