@@ -15,10 +15,10 @@ class DecisionTreeID :
         self._obtenerEtiquetas()
         filas = list(range(len(self.tabla))) #array con las filas permitidas (tipo np.array)
         columnas = self.tabla.columns.to_list() #array con las columnas permitidas (tipo np.array)
-        self.id3 = ID3.ID3(filas,columnas,self.tabla,self.etiquetas,altura=1) #Creamos el arbol, con altura 1
+        self.id3 = ID3.ID3(filas,columnas,self.tabla,self.etiquetas) #Creamos el arbol, con altura 1
 
     def drawDecisionTree(self):
-        print(self.id3)
+        print(self.id3.pintarArbol(1,[]))
     
     def prediction (self,registroCSV):
         None
@@ -32,7 +32,7 @@ class DecisionTreeID :
 
 
 main = DecisionTreeID()
-main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo2.csv")
+main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo.csv")
 main.drawDecisionTree()
 
 

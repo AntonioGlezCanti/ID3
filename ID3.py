@@ -1,9 +1,11 @@
 import math
+from os import remove
 import pandas.core.series as ser
+import termcolor as tm
 
 class ID3 :
 
-    def __init__(self,filas,columnas,tabla,etiquetas,altura):
+    def __init__(self,filas,columnas,tabla,etiquetas):
         self.tablaOriginal = tabla
         self.filas = filas
         self.columnas = columnas
@@ -15,7 +17,6 @@ class ID3 :
         self.ganancia = -1 #inicializamos a -1 ya que se puede dar el caso de que la ganancia sea 0, y en ese caso tendriamos que quedarnos con ella si es la primera
         self.nodo = None #Nodo seleccionado
         self.hijos = {}
-        self.altura = altura #altura del nodo, vamos a hacer que sea siempre par, esto para pintar el arbol, de modo que las etiquetas tengan altura impar 
         self.calcularNodo()
 
     """Calcula el nodo con mayor ganancia y lo guarda en la variable nodo"""
@@ -66,13 +67,56 @@ class ID3 :
         col.remove(self.nodo) #quitamos la columna del nodo
         for e in self.etiquetas.get(self.nodo): # para cada etiqueta del nodo
             fil = self.tabla[self.tabla[self.nodo] == e].index.to_list() #obtenemos las filas de cada etiqueta
-            self.hijos.update({e:ID3(fil,col,self.tablaOriginal,self.etiquetas,self.altura+2)}) #creamos el hijo, que ejecutará calcularNodo() y lo guardamos con la respectiva etiqueta
+            self.hijos.update({e:ID3(fil,col,self.tablaOriginal,self.etiquetas)}) #creamos el hijo, que ejecutará calcularNodo() y lo guardamos con la respectiva etiqueta
     
-    def __repr__(self):
+    """def __repr__(self):
         if not bool(self.hijos):
-            s = f'{self.nodo}\n'
+            s = tm.colored(f'{self.nodo}\n','red')
         else:
-            s = f'{self.nodo}\n'
+            s = tm.colored(f'{self.nodo}\n','red')
             for rama, nodo in self.hijos.items():
-                s += '\t'*(self.altura) + f'|----{rama}\n' + '\t'*(self.altura+1) + f'|----> {nodo}'
+                s += tm.colored('\t'*(self.altura) + f'|---- {rama}\n' + '\t'*(self.altura+1) + f'|----> {nodo}','cyan')
+        return s"""
+
+    """def _pintarArbol(self,nvl, listNvl):
+        if not bool(self.hijos):
+            s = tm.colored(f'{self.nodo}\n','red')
+        else:
+            s = tm.colored(f'{self.nodo}\n','red')
+            ramas =list(self.hijos.keys())
+            listNvl.append(nvl)
+            for rama, nodo in self.hijos.items():
+                print(f'{ramas}, {rama}')
+                ramas.remove(rama)
+                if not bool(ramas): 
+                    listNvl.remove(nvl)
+                tab=''
+                if not bool(listNvl): tab += '\t'*nvl
+                else:
+                    for i in range(1,listNvl[len(listNvl)-1]+1):
+                        tab += '\t'
+                        print(listNvl)
+                        if i in listNvl: tab+='|'
+                s += tm.colored( tab + f'---- {rama}\n' + '\t'*(nvl+1) + f'|----> {nodo._pintarArbol(nvl+2,listNvl)}','cyan')
+        return s"""
+    def pintarArbol(self, nvl, listNvl):
+        s = tm.colored(f'{self.nodo}\n','red')
+        if bool(self.hijos):
+            numHijos = len(self.hijos)
+            listNvl.append(nvl)
+            for rama, nodo in self.hijos.items():
+                numHijos-=1;
+                tab = self.tabuladores(nvl,listNvl)
+                s += tm.colored( tab + f'----{rama}\n','cyan')
+                if numHijos == 0: listNvl.remove(nvl)
+                print(listNvl)
+                tab = self.tabuladores(nvl+1,listNvl)
+                s +=  tm.colored(tab + f' |----> {nodo.pintarArbol(nvl+2,listNvl)}','cyan')
+        return s
+    
+    def tabuladores(self,nvl,listNvl):
+        s = ""
+        for i in range(1, nvl+1):
+            s+='\t'
+            if i in listNvl: s += '|'
         return s
