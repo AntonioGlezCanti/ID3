@@ -21,7 +21,10 @@ class DecisionTreeID :
         print(self.id3.pintarArbol(1,[]))
     
     def prediction (self,registroCSV):
-        None
+        registro = {}
+        for i in range(len(registroCSV)):
+            registro.update({self.tabla.columns.tolist()[i]:registroCSV[i]})
+        print(self.id3.prediction(registro))
 
     def _readCSV(self,ficheroCSV):
         self.tabla = pd.read_csv(ficheroCSV)
@@ -34,7 +37,8 @@ class DecisionTreeID :
 main = DecisionTreeID()
 main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo.csv")
 main.drawDecisionTree()
-
+registro = ["Media","Bajo","Alto","No","Si"]
+main.prediction(registro)
 
 
 

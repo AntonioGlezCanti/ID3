@@ -1,5 +1,4 @@
 import math
-from os import remove
 import pandas.core.series as ser
 import termcolor as tm
 
@@ -69,36 +68,13 @@ class ID3 :
             fil = self.tabla[self.tabla[self.nodo] == e].index.to_list() #obtenemos las filas de cada etiqueta
             self.hijos.update({e:ID3(fil,col,self.tablaOriginal,self.etiquetas)}) #creamos el hijo, que ejecutará calcularNodo() y lo guardamos con la respectiva etiqueta
     
-    """def __repr__(self):
+    def prediction(self,registroCSV):
         if not bool(self.hijos):
-            s = tm.colored(f'{self.nodo}\n','red')
+            return (f'{self.atrDec} : {self.nodo}')
         else:
-            s = tm.colored(f'{self.nodo}\n','red')
-            for rama, nodo in self.hijos.items():
-                s += tm.colored('\t'*(self.altura) + f'|---- {rama}\n' + '\t'*(self.altura+1) + f'|----> {nodo}','cyan')
-        return s"""
+            rama = registroCSV.get(self.nodo)
+            return self.hijos.get(rama).prediction(registroCSV)
 
-    """def _pintarArbol(self,nvl, listNvl):
-        if not bool(self.hijos):
-            s = tm.colored(f'{self.nodo}\n','red')
-        else:
-            s = tm.colored(f'{self.nodo}\n','red')
-            ramas =list(self.hijos.keys())
-            listNvl.append(nvl)
-            for rama, nodo in self.hijos.items():
-                print(f'{ramas}, {rama}')
-                ramas.remove(rama)
-                if not bool(ramas): 
-                    listNvl.remove(nvl)
-                tab=''
-                if not bool(listNvl): tab += '\t'*nvl
-                else:
-                    for i in range(1,listNvl[len(listNvl)-1]+1):
-                        tab += '\t'
-                        print(listNvl)
-                        if i in listNvl: tab+='|'
-                s += tm.colored( tab + f'---- {rama}\n' + '\t'*(nvl+1) + f'|----> {nodo._pintarArbol(nvl+2,listNvl)}','cyan')
-        return s"""
     def pintarArbol(self, nvl, listNvl):
         s = tm.colored(f'{self.nodo}\n','red')
         if bool(self.hijos):
@@ -109,9 +85,8 @@ class ID3 :
                 tab = self.tabuladores(nvl,listNvl)
                 s += tm.colored( tab + f'----{rama}\n','cyan')
                 if numHijos == 0: listNvl.remove(nvl)
-                print(listNvl)
                 tab = self.tabuladores(nvl+1,listNvl)
-                s +=  tm.colored(tab + f' |----> {nodo.pintarArbol(nvl+2,listNvl)}','cyan')
+                s +=  tm.colored(tab + f'|----> {nodo.pintarArbol(nvl+2,listNvl)}','cyan')
         return s
     
     def tabuladores(self,nvl,listNvl):
