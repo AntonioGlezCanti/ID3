@@ -1,7 +1,6 @@
 import ID3
 import numpy as np
 import pandas as pd
-import math
 
 class DecisionTreeID :
     
@@ -35,10 +34,10 @@ class DecisionTreeID :
 
 
 main = DecisionTreeID()
-main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo3.csv")
+main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo2.csv")
 main.drawDecisionTree()
-registro = [">5",">160","<40"]
-main.prediction(registro)
-#print((5/9)*math.log2(5/9) + (4/9)*math.log2(4/9))
+#registro = [">5",">160","<40"]
+#main.prediction(registro)
+
 
 

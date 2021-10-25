@@ -39,7 +39,7 @@ class ID3 :
     def _calcularGanancia(self,atributo):
         etAtr = self.etiquetas[atributo] #etiquetas del atributo para el que se desea calcular la ganancia
         cont = self.tabla.groupby([self.atrDec,atributo])[atributo].count() #agrupamos por atrDec y atributo, y contamos
-        cont2 = self.tabla.groupby(atributo)[self.atrDec].count()
+        cont2 = self.tabla[atributo].value_counts()
         g = self.entropia #inicializamos la ganancia
         nrow = len(self.tabla)
         
