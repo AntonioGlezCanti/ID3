@@ -20,14 +20,14 @@ class ID3 :
 
     """Calcula el nodo con mayor ganancia y lo guarda en la variable nodo"""
     def calcularNodo(self):
-        print(self.tabla)
         self._calcularEntropia() #calculamos la entropia
         if(self.entropia == 0): #Si es igual a 0, significa que solo hay una etiqueta de decision en la columna, la sacamos y ese será el valor del nodo
             self.nodo = self.tabla.iloc[0][self.atrDec]
+        elif (len(self.columnas) == 2):
+            self.nodo = cont = self.tabla[self.atrDec].value_counts().idxmax()
         else:
             for i in range(len(self.columnas)-1): #Calculamos la ganancia para cada atributo
                 self._calcularGanancia(self.columnas[i]) 
-            print(f'{self.nodo} -> {self.entropia} -> {self.ganancia}')
             self._crearHijos() #creamoos los hijos
 
     """Calculamos la entropia del nodo, es decir la general"""
@@ -59,13 +59,12 @@ class ID3 :
         total = sum(cont)
         for c in cont:
             if c != 0:
-                entropia -= c/total*math.log2(c/total)  #aplicamos la formula de la entropia           
+                entropia -= (c/total)*math.log2(c/total)  #aplicamos la formula de la entropia           
         return entropia
     
     """Crea los hijos para el nodo seleccionado con anterioridad"""
     def _crearHijos(self):
         col = self.columnas.copy() #copiamos el array de columnas para pasarselo a los hijos, ya que si es una referencia dará problemas
-        #print(f'{col} -> {self.nodo}')
         col.remove(self.nodo) #quitamos la columna del nodo
         for e in self.etiquetas.get(self.nodo): # para cada etiqueta del nodo
             fil = self.tabla[self.tabla[self.nodo] == e].index.to_list() #obtenemos las filas de cada etiqueta

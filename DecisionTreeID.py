@@ -35,10 +35,10 @@ class DecisionTreeID :
 
 
 main = DecisionTreeID()
-#main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo3.csv")
-#main.drawDecisionTree()
-#registro = ["Media","Bajo","Alto","No","No"]
-#main.prediction(registro)
-print((5/9)*math.log2(5/9) + (4/9)*math.log2(4/9))
+main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo3.csv")
+main.drawDecisionTree()
+registro = [">5",">160","<40"]
+main.prediction(registro)
+#print((5/9)*math.log2(5/9) + (4/9)*math.log2(4/9))
 
 
