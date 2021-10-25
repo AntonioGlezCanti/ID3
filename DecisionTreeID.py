@@ -34,8 +34,9 @@ class DecisionTreeID :
 
 
 main = DecisionTreeID()
-main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo2.csv")
+main.learnDT(r"C:\Users\gonza\Documents\Informática\Aprendizaje\ID3\ejemplo4.csv")
 main.drawDecisionTree()
+
 #registro = [">5",">160","<40"]
 #main.prediction(registro)
 

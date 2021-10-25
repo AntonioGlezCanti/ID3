@@ -21,7 +21,9 @@ class ID3 :
     """Calcula el nodo con mayor ganancia y lo guarda en la variable nodo"""
     def calcularNodo(self):
         self._calcularEntropia() #calculamos la entropia
-        if(self.entropia == 0): #Si es igual a 0, significa que solo hay una etiqueta de decision en la columna, la sacamos y ese será el valor del nodo
+        if (self.tabla.empty):
+            self.nodo = '?' 
+        elif(self.entropia == 0): #Si es igual a 0, significa que solo hay una etiqueta de decision en la columna, la sacamos y ese será el valor del nodo
             self.nodo = self.tabla.iloc[0][self.atrDec]
         elif (len(self.columnas) == 2):
             self.nodo = cont = self.tabla[self.atrDec].value_counts().idxmax()
@@ -48,7 +50,7 @@ class ID3 :
             for ed in self.etDec:
                 val.append(cont.get(ed,ser.Series([])).get(et,0)) #obtenemos la cantidad de la etiqueta correspondiente para cada etiqueta de atrDec                
             e = self._entropia(val) #calculamos la entropia
-            g -= cont2.get(et,0)/nrow*e 
+            g -= (cont2.get(et,0)/nrow)*e 
         if g > self.ganancia: #si la ganancia es mayor que la calculada anteriormente nos quedamos con ella
             self.ganancia = g
             self.nodo = atributo
